@@ -1,15 +1,20 @@
-﻿#include "mainwindow.h"
+﻿#include "cvfun.h"
+
+#include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include "dialog_erosion.h"
 #include "ui_dialog_erosion.h"
-#include <iostream>
+
 #include <QFileDialog>
-#include <QLabel>
-#include <qtextcodec.h>
+#include <QMessageBox>
+#include <QTextCodec>
+#include <opencv2/highgui/highgui.hpp>
+#include <opencv2/imgproc/imgproc.hpp>
+#include <iostream>
 
 using namespace std;
-using namespace cv;
-using namespace zbar;
+//using namespace cv;
+//using namespace zbar;
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -23,19 +28,16 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
-void MainWindow::winload(){
-
-}
 /*
 void MainWindow::resizeEvent ( QResizeEvent * event )
 {
-    scaled_mat(curr_mat);  
+    scaled_mat(curr_mat);
     statusBar()->removeWidget(aixLabel_pencentage);
     aixLabel_pencentage = new QLabel(QString::number(pecentage*100,10,2)+"%");
     statusBar()->addWidget(aixLabel_pencentage, 2);
 
 }
-*/
+
 Mat QImage2cvMat(QImage image)
 {
     cv::Mat mat;
@@ -57,51 +59,8 @@ Mat QImage2cvMat(QImage image)
     return mat;
 }
 
-QImage cvMat2QImage(const cv::Mat& mat)
-{
-    // 8-bits unsigned, NO. OF CHANNELS = 1
-    if(mat.type() == CV_8UC1)
-    {
-        QImage image(mat.cols, mat.rows, QImage::Format_Indexed8);
-        // Set the color table (used to translate colour indexes to qRgb values)
-        image.setColorCount(256);
-        for(int i = 0; i < 256; i++)
-        {
-            image.setColor(i, qRgb(i, i, i));
-        }
-        // Copy input Mat
-        uchar *pSrc = mat.data;
-        for(int row = 0; row < mat.rows; row ++)
-        {
-            uchar *pDest = image.scanLine(row);
-            memcpy(pDest, pSrc, mat.cols);
-            pSrc += mat.step;
-        }
-        return image;
-    }
-    // 8-bits unsigned, NO. OF CHANNELS = 3
-    else if(mat.type() == CV_8UC3)
-    {
-        // Copy input Mat
-        const uchar *pSrc = (const uchar*)mat.data;
-        // Create QImage with same dimensions as input Mat
-        QImage image(pSrc, mat.cols, mat.rows, mat.step, QImage::Format_RGB888);
-        return image.rgbSwapped();
-    }
-    else if(mat.type() == CV_8UC4)
-    {
-        // Copy input Mat
-        const uchar *pSrc = (const uchar*)mat.data;
-        // Create QImage with same dimensions as input Mat
-        QImage image(pSrc, mat.cols, mat.rows, mat.step, QImage::Format_ARGB32);
-        return image.copy();
-    }
-    else
-    {
-        return QImage();
-    }
-}
 
+*/
 void MainWindow::mat2label_pic(Mat mat)
 {
     ui->label_pic->clear();
@@ -178,7 +137,17 @@ void MainWindow::on_actionGrey_triggered()
     else{
 
         cvtColor(opened_mat, curr_mat, CV_BGR2GRAY);
-      //  // mat2pixmap(curr_mat);
+        //  // mat2pixmap(curr_mat);
         scaled_mat(curr_mat);
     }
+}
+
+void MainWindow::on_actioninput_triggered()
+{
+    Mat image = imread("D:\\1.jpg");
+    imshow("cvf", image);
+    image = rgb2grey(image);
+    ui->label_pic->clear();
+    ui->label_pic->setPixmap(QPixmap::fromImage(cvMat2QImage(image)));
+    ui->label_pic->show();
 }

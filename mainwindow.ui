@@ -347,6 +347,7 @@
     <property name="title">
      <string>Checked</string>
     </property>
+    <addaction name="actioninput"/>
    </widget>
    <addaction name="menuFile"/>
    <addaction name="menuView"/>
@@ -1040,6 +1041,11 @@
   <action name="actionReadSQL">
    <property name="text">
     <string>ReadSQL</string>
+   </property>
+  </action>
+  <action name="actioninput">
+   <property name="text">
+    <string>input</string>
    </property>
   </action>
  </widget>

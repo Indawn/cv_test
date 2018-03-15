@@ -2,27 +2,24 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
-#include <QMainWindow>
-#include <QResizeEvent>
-#include <QMessageBox>
-#include <QTextCodec>
-
 #include <QCoreApplication>
-#include <opencv2/core/core.hpp>
-#include <opencv2/highgui/highgui.hpp>
-#include <opencv2/imgproc/imgproc.hpp>
-#include <math.h>
 #include <QLabel>
-#include <stdlib.h>
-#include <stdio.h>
+#include <opencv2/core/core.hpp>
+
+using namespace cv;
+/*
+#include <QResizeEvent>
+
 #include <opencv2/ml/ml.hpp>
 #include "zbar.h"
+#include <math.h>
 
-
-using namespace std;
-using namespace cv;
+#include <stdlib.h>
+#include <stdio.h>
 using namespace zbar;
+using namespace std;
 
+*/
 namespace Ui {
 class MainWindow;
 }
@@ -47,14 +44,13 @@ public:
     Mat erzhihua;
     Mat canny_mat;
     Mat mat_end;
-        Mat mat_mid;
-  //  vector<Point>  max_contours;
+    Mat mat_mid;
 
     double pecentage;
 
     void mat2label_pic(Mat mat);
     void scaled_mat(Mat mat);
-    void winload();
+
 
 public slots:
 /*    void erosion(int erosion_elem ,int erosion_size ,int );
@@ -69,7 +65,7 @@ private slots:
 
     void on_actionGrey_triggered();
 
-
+    void on_actioninput_triggered();
 
 private:
     Ui::MainWindow *ui;
