@@ -8,7 +8,7 @@
 
 using namespace cv;
 /*
-#include <QResizeEvent>
+
 
 #include <opencv2/ml/ml.hpp>
 #include "zbar.h"
@@ -33,6 +33,7 @@ public:
     ~MainWindow();
 
     QString curr_picname;
+    Mat curr_mat;
 
     QLabel *aixLabel;
     QLabel *aixLabel_pencentage;
@@ -40,7 +41,7 @@ public:
     float mat_de[10];
 
     Mat opened_mat;
-    Mat curr_mat;
+
     Mat erzhihua;
     Mat canny_mat;
     Mat mat_end;
@@ -48,8 +49,8 @@ public:
 
     double pecentage;
 
-    void mat2label_pic(Mat mat);
-    void scaled_mat(Mat mat);
+    void scaledmat2label(Mat mat, QLabel* label);
+
 
 
 public slots:
@@ -67,6 +68,7 @@ private slots:
 
     void on_actioninput_triggered();
 
+    void resizeEvent ( QResizeEvent * event );
 private:
     Ui::MainWindow *ui;
 };

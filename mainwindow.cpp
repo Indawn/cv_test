@@ -11,7 +11,7 @@
 #include <opencv2/highgui/highgui.hpp>
 #include <opencv2/imgproc/imgproc.hpp>
 #include <iostream>
-
+#include <QResizeEvent>
 using namespace std;
 //using namespace cv;
 //using namespace zbar;
@@ -28,62 +28,34 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
-/*
+
 void MainWindow::resizeEvent ( QResizeEvent * event )
 {
-    scaled_mat(curr_mat);
+    scaledmat2label(curr_mat, ui->label_pic);
     statusBar()->removeWidget(aixLabel_pencentage);
     aixLabel_pencentage = new QLabel(QString::number(pecentage*100,10,2)+"%");
     statusBar()->addWidget(aixLabel_pencentage, 2);
 
 }
 
-Mat QImage2cvMat(QImage image)
-{
-    cv::Mat mat;
-    switch(image.format())
-    {
-    case QImage::Format_ARGB32:
-    case QImage::Format_RGB32:
-    case QImage::Format_ARGB32_Premultiplied:
-        mat = cv::Mat(image.height(), image.width(), CV_8UC4, (void*)image.bits(), image.bytesPerLine());
-        break;
-    case QImage::Format_RGB888:
-        mat = cv::Mat(image.height(), image.width(), CV_8UC3, (void*)image.bits(), image.bytesPerLine());
-        cv::cvtColor(mat, mat, CV_BGR2RGB);
-        break;
-    case QImage::Format_Indexed8:
-        mat = cv::Mat(image.height(), image.width(), CV_8UC1, (void*)image.bits(), image.bytesPerLine());
-        break;
-    }
-    return mat;
-}
-
-
-*/
-void MainWindow::mat2label_pic(Mat mat)
-{
-    ui->label_pic->clear();
-    ui->label_pic->setPixmap(QPixmap::fromImage(cvMat2QImage(mat)));
-    ui->label_pic->show();
-}
-
-void MainWindow::scaled_mat(Mat mat)
+void MainWindow::scaledmat2label(Mat mat, QLabel* label)
 {
     if(mat.data)
     {
-        Mat image2;
+      //  Mat image;
         pecentage=(double)ui->label_pic->width()/mat.cols;
         if((double)ui->label_pic->height()/mat.rows<pecentage)
             pecentage =(double)ui->label_pic->height()/mat.rows;
-        cv::resize(mat,image2,cv::Size(0,0),pecentage,pecentage,INTER_AREA );
-        mat2label_pic(image2);
+        cv::resize(mat,mat,cv::Size(0,0),pecentage,pecentage,INTER_AREA );
+        label->clear();
+        label->setPixmap(QPixmap::fromImage(cvMat2QImage(mat)));
+        label->show();
     }
 }
 
 void MainWindow::on_actionOpen_triggered()
 {
-    ui->textBrowser->clear();
+//    ui->textBrowser->clear();
     QFileDialog *fileDialog = new QFileDialog(this);//创建一个QFileDialog对象，构造函数中的参数可以有所添加。
     fileDialog->setWindowTitle(tr("Open"));//设置文件保存对话框的标题
     fileDialog->setAcceptMode(QFileDialog::AcceptOpen);//设置文件对话框为保存模式
@@ -98,32 +70,20 @@ void MainWindow::on_actionOpen_triggered()
         curr_picname = fileDialog->selectedFiles()[0];//得到用户选择的文件名
         opened_mat=imread(curr_picname.toLocal8Bit().constData());
         curr_mat = opened_mat;
-
         if(opened_mat.data)
         {
-            Mat image2;
-            pecentage=(double)ui->label_origin->width()/opened_mat.cols;
-            if((double)ui->label_origin->height()/opened_mat.rows<pecentage)
-                pecentage =(double)ui->label_origin->height()/opened_mat.rows;
-            cv::resize(opened_mat,image2,cv::Size(0,0),pecentage,pecentage,INTER_AREA );
-            ui->label_origin->clear();
-            ui->label_origin->setPixmap(QPixmap::fromImage(cvMat2QImage(image2)));
-            ui->label_origin->show();
-            //mat2label_pic(image2);
+            scaledmat2label(opened_mat, ui->label_pic);
+            statusBar()->setVisible(true);
+            scaledmat2label(curr_mat, ui->label_pic);
+
+            statusBar()->removeWidget(aixLabel);
+            statusBar()->removeWidget(aixLabel_pencentage);
+            aixLabel = new QLabel(curr_picname);
+            aixLabel_pencentage = new QLabel(QString::number(pecentage*100,10,2)+"%");
+            statusBar()->setStyleSheet(QString("QStatusBar::item{border: 0px}")); // 设置不显示label的边框
+            statusBar()->addWidget(aixLabel, 1);
+            statusBar()->addWidget(aixLabel_pencentage, 2);
         }
-
-
-        statusBar()->setVisible(true);
-        scaled_mat(curr_mat);
-
-        statusBar()->removeWidget(aixLabel);
-        statusBar()->removeWidget(aixLabel_pencentage);
-        aixLabel = new QLabel(curr_picname);
-        aixLabel_pencentage = new QLabel(QString::number(pecentage*100,10,2)+"%");
-        statusBar()->setStyleSheet(QString("QStatusBar::item{border: 0px}")); // 设置不显示label的边框
-        statusBar()->addWidget(aixLabel, 1);
-        statusBar()->addWidget(aixLabel_pencentage, 2);
-
     }
 }
 
@@ -135,10 +95,9 @@ void MainWindow::on_actionGrey_triggered()
         msg.exec();
     }
     else{
-
         cvtColor(opened_mat, curr_mat, CV_BGR2GRAY);
         //  // mat2pixmap(curr_mat);
-        scaled_mat(curr_mat);
+        scaledmat2label(curr_mat, ui->label_pic);
     }
 }
 
