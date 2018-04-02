@@ -32,8 +32,7 @@ SOURCES += \
     mainwindow.cpp \
     dialog_erosion.cpp \
     main.cpp \
-    mainwindow.cpp \
-    cvfun.cpp
+    mainwindow.cpp
 
 HEADERS += \
         mainwindow.h \
@@ -41,8 +40,7 @@ HEADERS += \
     dialog_erosion.h \
     mainwindow.h \
     dialog_erosion.h \
-    mainwindow.h \
-    cvfun.h
+    mainwindow.h
 
 FORMS += \
         mainwindow.ui \
