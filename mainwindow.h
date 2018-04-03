@@ -189,6 +189,8 @@ private slots:
 
     void on_actionerBinaryzation_triggered();
 
+    void on_spinBox_canny_guss_ken_valueChanged(int arg1);
+
 private:
     Ui::MainWindow *ui;
 };

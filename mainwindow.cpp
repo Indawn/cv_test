@@ -600,7 +600,7 @@ void MainWindow::curr_canny()
                 int edgeThresh = 1;
                 int lowThreshold= ui->spinBox_canny_low->value();;
                 int const max_lowThreshold = 100;
-               // int ratio = ui->spinBox_canny_kernel->value();
+                // int ratio = ui->spinBox_canny_kernel->value();
                 int kernel_size = ui->spinBox_canny_kernel->value();
                 //    char* window_name = "Edge Map";
 
@@ -630,7 +630,8 @@ void MainWindow::curr_canny()
                 /// 显示图像
                 //    CannyThreshold(0, 0);
                 /// 使用 3x3内核降噪
-                blur(src_gray, mat_cut, Size(3, 3));
+                GaussianBlur(src_gray, mat_cut, Size(ui->spinBox_canny_guss_ken->value(), ui->spinBox_canny_guss_ken->value()), 0, 0);
+                //   blur(src_gray, mat_cut, Size(ui->spinBox_canny_guss_ken->value(), ui->spinBox_canny_guss_ken->value()));
                 scaledmat2label(mat_cut, ui->label_cut);
                 /// 运行Canny算子
                 Canny(mat_cut, detected_edges, lowThreshold,  ui->spinBox_canny_high->value(), kernel_size);
@@ -788,23 +789,8 @@ void MainWindow::on_pushButton_setcanny_clicked()
 void MainWindow::on_pushButton_largeaera_clicked()
 {
     Mat I = mat_opened.clone();
- /*   cvtColor(I, I, CV_BGR2GRAY);
-    for (int i=0;i<I.rows;i++)
-    {
-        for (int j=0;j<I.cols;j++)
-        {
-            if (pointPolygonTest(max_contours,cv::Point(i,j),false) == -1)
-            {
-                I.at<uchar>(i,j)=0;//对灰度图像素操作赋
-            }
-        }
-    }
-*/
     namedWindow( "最大轮廓区域", WINDOW_NORMAL );
     imshow( "最大轮廓区域", I );
-   // return I;
-  //  cv::Point p1(x,y);
-
 }
 
 void MainWindow::on_pushButton_openmat_clicked()
@@ -815,7 +801,6 @@ void MainWindow::on_pushButton_openmat_clicked()
 
 void MainWindow::on_pushButton_onekey_clicked()
 {
-
 
 
 }
@@ -888,9 +873,7 @@ void MainWindow::onekey_canny()
         // imshow(window_name, dst);
         // mat2pixmap(dst);
         mat_current=dst;
-         scaledmat2label(mat_current, ui->label_current);
-
-
+        scaledmat2label(mat_current, ui->label_current);
 */
         //---------------------------------------------------------------------------------------
         mat_cut.copyTo(mat_contour);
@@ -900,16 +883,13 @@ void MainWindow::onekey_canny()
             cvtColor(mat_contour, mat_contour, CV_BGR2GRAY);
         threshold(mat_contour,mat_contour,(int)m + (int)sd ,255,CV_THRESH_BINARY);  //二值化ui->spinBox_enzhi->value()
         // mat2pixmap(mat_cut);
-   //     mat_current=mat_cut;
+        //     mat_current=mat_cut;
         //scaled_mat(mat_opened);
         dilation(0, ui->spinBox_dia->value(), 0);
         // mat_opened = mat_current;
         erosion(0, ui->spinBox_ero->value(), 0);
         // mat_opened = mat_current;
         canny_mat = mat_contour;
-
-
-
 
         RNG rng(12345);
         vector<vector<Point> > contours;
@@ -939,7 +919,6 @@ void MainWindow::onekey_canny()
                 max_length = l;
                 max_i = i;
             }
-
         }
        // scaledmat2label(drawing, ui->label_contour );
         avg_length = sum_length / contour_num;//contours.size();
@@ -951,7 +930,6 @@ void MainWindow::onekey_canny()
         int half_num = 0;
         for( size_t i = 0; i< contours.size(); i++ )
         {
-
             if(contourArea(contours[i],false)>s/2)
             {
 
@@ -984,11 +962,9 @@ void MainWindow::onekey_canny()
         mat_de[4] =(int)variance_length;
                // mat_de[0] =
 
-
         Mat I = imread(curr_picname.toLocal8Bit().constData());
         int sum_grey = 0;
         int sum_greynum = 0;
-
 
         if(I.channels()!=1)
             cvtColor(I, I, CV_BGR2GRAY);
@@ -1025,11 +1001,11 @@ void MainWindow::onekey_canny()
             }
         }
         double variance_grey = va_grey/sum_greynum;
-   //     cout<<"最大轮廓内共"<<sum_greynum<<"个像素；"<<"灰度平均值为："<<avg_gery<<
-   //           "；灰度方差为："<<variance_grey<<endl;
+        //     cout<<"最大轮廓内共"<<sum_greynum<<"个像素；"<<"灰度平均值为："<<avg_gery<<
+        //           "；灰度方差为："<<variance_grey<<endl;
         cout<<(int)avg_gery<<", "<<(int)variance_grey<<", ";
         mat_de[5] =(int)avg_gery;
-         mat_de[6] =(int)variance_grey;
+        mat_de[6] =(int)variance_grey;
 
         Mat imageContours=Mat::zeros(mat_opened.size(),CV_8UC1); //最小外接矩形画布
         Mat imageContours1=Mat::zeros(mat_opened.size(),CV_8UC1); //最小外结圆画布
@@ -1065,8 +1041,8 @@ void MainWindow::onekey_canny()
 
         cout<<(int)radius<<" },   "<<endl;
         mat_de[9] =(int)radius;
-        imshow("MinAreaRect",imageContours);
-        imshow("MinAreaCircle",imageContours1);
+     //   imshow("MinAreaRect",imageContours);
+      //  imshow("MinAreaCircle",imageContours1);
         if(I.data)
         {
             mat_last = I;
@@ -1122,11 +1098,6 @@ void MainWindow::on_spinBox_cannymax_valueChanged(int arg1)
     onekey_canny();
 }
 
-void MainWindow::on_spinBox_cannyken_valueChanged(int arg1)
-{
-    onekey_canny();
-}
-
 void MainWindow::on_spinBox_enzhi_valueChanged(int arg1)
 {
     onekey_canny();
@@ -1177,7 +1148,6 @@ void MainWindow::on_spinBox_test_valueChanged(const QString &arg1)
   //  cout<<endl<<"###缺陷"<<arg1.toLocal8Bit().constData()<<":"<<endl;
     curr_picname = u8"D:\\钢板缺陷\\old\\1 ("+arg1+").bmp";//得到用户选择的文件名
     mat_opened=imread(curr_picname.toLocal8Bit().constData());
-
     if(mat_opened.empty())
         cout<<"empty:"<<curr_picname.toLocal8Bit().constData()<<endl;
     else
@@ -1202,7 +1172,6 @@ void MainWindow::on_actionoutput_triggered()
         for(int j = 1; j < 21; j++)
         {
             curr_picname = u8"D:\\钢板缺陷\\"+ QString::number( i, 10)+"\\"+ QString::number( j, 10) +".bmp";//得到用户选择的文件名
-            //     curr_picname = u8"D:\\钢板缺陷\\old\\1 ("+arg1+").bmp";//得到用户选择的文件名
             mat_opened=imread(curr_picname.toLocal8Bit().constData());
             mat_current = mat_opened;
             if(mat_opened.empty())
@@ -1218,4 +1187,12 @@ void MainWindow::on_actionoutput_triggered()
 void MainWindow::on_actionerBinaryzation_triggered()
 {
 
+}
+void MainWindow::on_spinBox_cannyken_valueChanged(int arg1)
+{
+    curr_canny();
+}
+void MainWindow::on_spinBox_canny_guss_ken_valueChanged(int arg1)
+{
+    curr_canny();
 }
