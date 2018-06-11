@@ -35,6 +35,7 @@ public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
 
+    QString pic_dir;
     QString curr_picname;
 
     QLabel *aixLabel;
@@ -49,8 +50,8 @@ public:
     Mat mat_contour;
     Mat mat_last;
 
-
-
+    float trainingData[120][10];
+    float labeldata[120];
 
     Mat canny_mat;
 
@@ -59,6 +60,9 @@ public:
 
 
 
+
+    Mat QImage2cvMat(QImage image);
+    QImage cvMat2QImage(const cv::Mat& mat);
   //  vector<Point>  max_contours;
 
     double pecentage;
@@ -66,6 +70,13 @@ public:
 //    void mat2label_current(Mat mat);
 //    void scaled_mat(Mat mat);
     void winload();
+
+void build_trainingdata();
+    void svm_training();
+
+
+
+
 
 public slots:
     void erosion(int erosion_elem ,int erosion_size ,int );
@@ -190,6 +201,22 @@ private slots:
     void on_actionerBinaryzation_triggered();
 
     void on_spinBox_canny_guss_ken_valueChanged(int arg1);
+
+    void on_actionbmp2jpg_triggered();
+
+    void on_actionSVMtraining_triggered();
+
+    void on_actionOutput_traindata_triggered();
+
+    void on_actionOutput_labeldata_triggered();
+
+    void on_actionbuild_traindata_triggered();
+
+    void on_actionSVMtesting_triggered();
+
+    void on_actionBPtraining_triggered();
+
+    void on_actionBP_testing_triggered();
 
 private:
     Ui::MainWindow *ui;

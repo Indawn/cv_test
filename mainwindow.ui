@@ -415,12 +415,26 @@
     <addaction name="actionQRall"/>
     <addaction name="actionFilter"/>
    </widget>
+   <widget class="QMenu" name="menuHotkey">
+    <property name="title">
+     <string>Hotkey</string>
+    </property>
+    <addaction name="actionbmp2jpg"/>
+    <addaction name="actionSVMtraining"/>
+    <addaction name="actionOutput_traindata"/>
+    <addaction name="actionOutput_labeldata"/>
+    <addaction name="actionbuild_traindata"/>
+    <addaction name="actionSVMtesting"/>
+    <addaction name="actionBPtraining"/>
+    <addaction name="actionBP_testing"/>
+   </widget>
    <addaction name="menuFile"/>
    <addaction name="menuView"/>
    <addaction name="menuCut"/>
    <addaction name="menuerosion"/>
    <addaction name="menumorp"/>
    <addaction name="menuChecked"/>
+   <addaction name="menuHotkey"/>
   </widget>
   <widget class="QStatusBar" name="statusBar"/>
   <widget class="QDockWidget" name="dockWidget">
@@ -972,6 +986,46 @@
   <action name="actionoutput">
    <property name="text">
     <string>output</string>
+   </property>
+  </action>
+  <action name="actionbmp2jpg">
+   <property name="text">
+    <string>bmp2jpg</string>
+   </property>
+  </action>
+  <action name="actionSVMtraining">
+   <property name="text">
+    <string>SVMtraining</string>
+   </property>
+  </action>
+  <action name="actionOutput_traindata">
+   <property name="text">
+    <string>Output_traindata</string>
+   </property>
+  </action>
+  <action name="actionOutput_labeldata">
+   <property name="text">
+    <string>Output_labeldata</string>
+   </property>
+  </action>
+  <action name="actionbuild_traindata">
+   <property name="text">
+    <string>build_traindata</string>
+   </property>
+  </action>
+  <action name="actionSVMtesting">
+   <property name="text">
+    <string>SVMtesting</string>
+   </property>
+  </action>
+  <action name="actionBPtraining">
+   <property name="text">
+    <string>BPtraining</string>
+   </property>
+  </action>
+  <action name="actionBP_testing">
+   <property name="text">
+    <string>BP_testing</string>
    </property>
   </action>
  </widget>
