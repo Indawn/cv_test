@@ -200,6 +200,7 @@ private slots:
 
     void on_actionerBinaryzation_triggered();
 
+<<<<<<< HEAD
     void on_spinBox_canny_guss_ken_valueChanged(int arg1);
 
     void on_actionbmp2jpg_triggered();
@@ -218,6 +219,8 @@ private slots:
 
     void on_actionBP_testing_triggered();
 
+=======
+>>>>>>> parent of 2cd8d70... 0402
 private:
     Ui::MainWindow *ui;
 };
